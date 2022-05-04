@@ -2,7 +2,11 @@ import pandas as pd
 import tkinter as tk 
 from PIL import ImageTk, Image
 
-df = pd.read_csv("cities.csv")
+#df = pd.read_ex("cities.csv")
+df = pd.read_excel("americancities.xls")
+#pwith pd.ExcelWriter("americancities.xls") as writer:
+    #df.to_excel(writer)
+
 #print(df)
 
 
