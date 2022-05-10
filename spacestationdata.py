@@ -23,7 +23,7 @@ for i in p:
 
     h = list(map(float,h[1:7]))
     h = [l] + h
-    print(h)
+    #print(h)
     d.append(h)
 
 
@@ -55,6 +55,12 @@ def this_is_dumb(theta):
     if theta < 0:
         t = theta + 90
     return t
+def get_day(epoch):
+    e = epoch.split("-").pop(-1)
+    #print(e)
+    e = e.split("T")
+    #print(e)
+    return float(e[0])
 
 df["radius"] = radi(df["X"], df["Y"], df["Z"])
 df["speed"] = find_speed(df["X_DOT"], df["Y_DOT"], df["Z_DOT"])
@@ -68,17 +74,21 @@ lat_list = []
 for i in df["theta"]:
     lat_list.append(this_is_dumb(i))
 
+day_list = []
+for i in df["EPOCH"]:
+    day_list.append(get_day(i))
 
 df["phi"] = phi_list
+df["day"] = day_list
 df["lat"] = lat_list
 df["lon"] =  df["phi"]
 #print(df)
 def filter_by(column,data,max):
-    return data[data[column] <= max] 
+    return data[data[column] >= max] 
 
 
     
-print(filter_by('radius', df, 6790))
+#df = filter_by('day', df, 129)
 
 
 
@@ -99,6 +109,9 @@ def make_marker(lon1,lat1):
     lat = 256 - (v2*(lat1))
     canavas.create_oval((lon-5,lat-5,lon+5,lat+5),fill="#ff0000")
 
-for lon, lat in zip(df["lon"],df["lat"]):
-    make_marker(lon,lat)
+
+for lon, lat, day in zip(df["lon"],df["lat"],df["day"]):
+    if day == 129:
+        make_marker(lon,lat)
+
 root.mainloop()
