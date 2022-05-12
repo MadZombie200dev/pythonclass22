@@ -106,27 +106,54 @@ canavas.create_image(512,256,image=map_image)
 canavas.pack()
 
 
-def colorz(r):
-    minh
-    maxh
+
+
+
 
 def make_marker(lon1,lat1,r):
+    #frame = tk.Frame(root,width=10, height=10)
     lon = 512 - (v*(lon1))
     lat = 256 - (v2*(lat1))
     minh = min(df["radius"])
     maxh = max(df["radius"])
     rangecolor = 255
     col = str(hex(int(((r-minh)/(maxh-minh))*255)))[2::]
-    if len(col) == 1:
+    if len(col) == 1:   
         col = "0" + col
 
     #print(col)
 
     canavas.create_oval((lon-5,lat-5,lon+5,lat+5),fill=f"#{col}0000")
+    j = [int(lon-5),int(lat-5),int(lon+5),int(lat+5)]
+    return j
 
 
-for lon, lat, day,r in zip(df["lon"],df["lat"],df["day"],df["radius"]):
+h = {}
+
+for lon, lat, day,r,ind in zip(df["lon"],df["lat"],df["day"],df["radius"],df.index):
     if day == 132:
-        make_marker(lon,lat,r)
+        #print(ind)
+        h[ind]= make_marker(lon,lat,r)
+#print()
+#label = tk.Label(canavas, bg = "grey", bd = 10)
+label = tk.Label(canavas, bg = "grey", bd = 10)
+def printme(event):
+   
+    text = ""
+    valid = False
+    
+    for index, value in h.items():
+        if event.x < value[2] and event.x > value[0] and event.y < value[3] and event.y > value[1]:
+            point_data = df.iloc[index]
+            valid = True
+            text = text + f"Longitude: {int(point_data['lon'])} \n Latitude: {int(point_data['lat'])} \n Speed: {int(point_data['speed'])} \n Day: {str(point_data['EPOCH'])} \n -----------------------\n"
+    if valid == True:
+        label['text'] = text
+        label.place(x = event.x, y = event.y)
+    if valid == False:
+        label.place_forget()
+
+
+o = canavas.bind("<Button-1>", printme)
 
 root.mainloop()
