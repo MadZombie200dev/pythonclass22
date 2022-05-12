@@ -104,14 +104,29 @@ map_image = ImageTk.PhotoImage(Image.open(image))
 canavas = tk.Canvas(root,width=1024,height=512)
 canavas.create_image(512,256,image=map_image)
 canavas.pack()
-def make_marker(lon1,lat1):
+
+
+def colorz(r):
+    minh
+    maxh
+
+def make_marker(lon1,lat1,r):
     lon = 512 - (v*(lon1))
     lat = 256 - (v2*(lat1))
-    canavas.create_oval((lon-5,lat-5,lon+5,lat+5),fill="#ff0000")
+    minh = min(df["radius"])
+    maxh = max(df["radius"])
+    rangecolor = 255
+    col = str(hex(int(((r-minh)/(maxh-minh))*255)))[2::]
+    if len(col) == 1:
+        col = "0" + col
+
+    #print(col)
+
+    canavas.create_oval((lon-5,lat-5,lon+5,lat+5),fill=f"#{col}0000")
 
 
-for lon, lat, day in zip(df["lon"],df["lat"],df["day"]):
-    if day == 129:
-        make_marker(lon,lat)
+for lon, lat, day,r in zip(df["lon"],df["lat"],df["day"],df["radius"]):
+    if day == 132:
+        make_marker(lon,lat,r)
 
 root.mainloop()
